@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from "react";
+import axios from "axios";
 import {
   FormField,
   Button,
@@ -16,12 +17,12 @@ import {
 
 const OPTIONS = [
   {
-    key: "Single Select",
+    key: "singleSelect",
     text: "Single Select",
     value: "Single Select",
   },
   {
-    key: "Multi Select",
+    key: "multiSelect",
     text: "Multi Select",
     value: "Multi Select",
   },
@@ -30,6 +31,7 @@ const OPTIONS = [
 export default function Builder() {
   const [question, setQuestion] = useState("");
   const [options, setOptions] = useState(["", ""]);
+  const [pollType, setPollType] = useState("singleSelect");
 
   const handleOptionChange = (index, value) => {
     const newOptions = [...options];
@@ -41,12 +43,26 @@ export default function Builder() {
     setOptions([...options, ""]);
   };
 
+  const changePollType = (choice) => {
+    setPollType(choice);
+  };
+
   const handleSubmit = (e) => {
+    debugger;
     e.preventDefault();
     // Handle form submission]]
     console.log(e);
     console.log("question", question);
     console.log("options", options);
+    const req = {
+      question,
+      answers: options,
+      pollType,
+    };
+    axios.post("http://192.168.1.78:8080/set-poll", req).then((res) => {
+      const { data } = res;
+      console.log(data);
+    });
   };
 
   return (
@@ -69,6 +85,7 @@ export default function Builder() {
               />
               <Dropdown
                 inline
+                onChange={changePollType}
                 options={OPTIONS}
                 defaultValue={OPTIONS[0].value}
               />
