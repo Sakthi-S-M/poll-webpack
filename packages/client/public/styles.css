@@ -15,4 +15,5 @@
 .builderWrapper .ui.form .fields.fieldsGroup {
   flex-direction: column;
   gap: 10px;
+  margin-block-end: 2rem;
 }
